@@ -8,6 +8,9 @@
             "test" : -830038395
         }
     },
+    "printer3d" : {
+        "apibase":"http://192.168.1.100"
+    },
     "currency":{
         "default": "AMD",
         "cryptoUpdateInterval":50000,
