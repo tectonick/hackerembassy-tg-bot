@@ -292,8 +292,9 @@ bot.onText(/^\/close(@.+?)?$/, closeHandler);
 
 let inHandler = (msg) => {
   let eventDate = new Date();
-  let gotIn = LetIn(msg.from.username, eventDate);
-  let message = `🟢 ${tag()}${msg.from.username} пришел в спейс 🟢
+  let user = msg.from.username ?? msg.from.first_name;
+  let gotIn = LetIn(user, eventDate);
+  let message = `🟢 ${tag()}${user} пришел в спейс 🟢
 🗓 ${eventDate.toLocaleString()} `;
 
   if (!gotIn) {
