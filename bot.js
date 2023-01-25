@@ -175,6 +175,10 @@ let statusHandler = (msg) => {
         ],
         [
           {
+            text: "Повторить команду",
+            callback_data: JSON.stringify({ command: "/status" }),
+          },
+          {
             text: "Закрыть спейс",
             callback_data: JSON.stringify({ command: "/close" }),
           },
@@ -182,6 +186,10 @@ let statusHandler = (msg) => {
       ]
     : [
         [
+          {
+            text: "Повторить команду",
+            callback_data: JSON.stringify({ command: "/status" }),
+          },
           {
             text: "Открыть спейс",
             callback_data: JSON.stringify({ command: "/open" }),
@@ -323,6 +331,10 @@ let inHandler = (msg) => {
     : [
         [
           {
+            text: "Повторить команду",
+            callback_data: JSON.stringify({ command: "/in" }),
+          },
+          {
             text: "Открыть спейс",
             callback_data: JSON.stringify({ command: "/open" }),
           },
@@ -367,6 +379,10 @@ let outHandler = (msg) => {
       ]
     : [
         [
+          {
+            text: "Повторить команду",
+            callback_data: JSON.stringify({ command: "/out" }),
+          },
           {
             text: "Открыть спейс",
             callback_data: JSON.stringify({ command: "/open" }),
