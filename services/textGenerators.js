@@ -181,15 +181,16 @@ async function getPrinterInfo(status) {
   let message = `Статус принтера: ${state}`;
 
   if (state === "printing") {
+
     let minutesPast = (print_stats.total_duration / 60).toFixed(2);
-    let progress = (status.display_status * 100).toFixed(0);
-    let estimate = ((minutesPast * (100 - progress)) / 100).toFixed(2);
+    let progress = (status.display_status.progress * 100).toFixed(0);
+    let estimate = (((minutesPast / progress) * (100 - progress))).toFixed(2);
 
     message = `📠 Печатается ${print_stats.filename}
 
 🕔 Процент файл завершения ${progress}%
    Прошло ${minutesPast} минут
-   Осталось ${estimate} минут
+   Осталось ~${estimate} минут
 
 📏 Использовано ${print_stats.filament_used.toFixed(2)} мм филамента
 

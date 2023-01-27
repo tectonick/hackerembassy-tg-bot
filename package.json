@@ -6,9 +6,12 @@
   "scripts": {
     "start": "node bot.js",
     "dev": "nodemon bot.js",
+    "embassy-tunnel": "ssh -f -N -R 2000:127.0.0.1:2000 root@nickkiselev.me",
+    "embassy-api":"npm run embassy-tunnel && nohup node ./services/embassyApi.js &",
+    "stop-embassy-api":"skill -c 'nohup node ./services/embassyApi.js &'",
     "git": "git add * && git commit && git push",
     "git-redo": "nodemon bot.js",
-    "update-and-start": "npm run kill && git pull && npm run start-bot && npm run start-api-https",
+    "update-and-start": "npm run kill && git pull && npm i && npm run start-bot && npm run start-api-https",
     "start-bot": "nohup node bot.js &",
     "start-api-https": "caddy start",
     "kill": "skill -c nohup node bot.js &",

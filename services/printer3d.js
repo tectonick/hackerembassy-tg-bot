@@ -10,11 +10,15 @@ class Printer3d{
         return await response.json();
     }
     static async getFileMetadata(filename){
+        if (!filename) return undefined;
+        
         const response = await fetch(`${apiBase}/server/files/metadata?filename=${filename}`);
         return await response.json();
     }
 
     static async getFile(path){
+        if (!path) return undefined;
+
         const response = await fetch(`${apiBase}/server/files/gcodes/${path}`);
         return response.status === 200 ? await response.blob() : null;
     }

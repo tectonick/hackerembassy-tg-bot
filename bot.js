@@ -23,6 +23,7 @@ const {
 } = require("./botExtensions");
 const api = require("./api");
 const printer3d = require("./services/printer3d");
+const fetch = require("node-fetch");
 
 function parseMoneyValue(value) {
   return Number(
@@ -67,27 +68,22 @@ let exportDonutHandler = async (msg, fundName) => {
 };
 
 bot.onText(/^\/(printer)(@.+?)?$/, async (msg) => {
-  let message;
-  let thumbnailBuffer;
-
   try {
-    let status = (await printer3d.getPrinterStatus())?.result?.status;
-
-    if (status) {
-      message = await TextGenerators.getPrinterInfo(status);
-      let fileMetadata = (await printer3d.getFileMetadata(status.print_stats.filename))?.result;
-      console.log(fileMetadata)
-      thumbnailBuffer = await printer3d.getThumbnail(fileMetadata?.thumbnails[2]?.relative_path);
-    }    
-  } catch (error) {
-    console.log(error);
-    message = `Принтер недоступен`;
+    var {status, fileMetadata, thumbnailBuffer} = await (await fetch("http://127.0.0.1:2000/printer"))?.json();
+    
+    if (status && !status.error) {
+      var message = await TextGenerators.getPrinterInfo(status);
+    } else throw Error();
   }
-
-  if (thumbnailBuffer) {
-    bot.sendPhoto(msg.chat.id, thumbnailBuffer, { caption: message }, fileOptions);
-  } else {
-    bot.sendMessage(msg.chat.id, message);
+  catch {
+    message = `Принтер недоступен`;
+  } 
+  finally {
+    if (thumbnailBuffer) {
+      bot.sendPhoto(msg.chat.id, Buffer.from(thumbnailBuffer), { caption: message });
+    } else {
+      bot.sendMessage(msg.chat.id, message);
+    }
   }
 });
 
