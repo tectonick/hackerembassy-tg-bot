@@ -16,13 +16,15 @@ class Printer3d{
 
     static async getFile(path){
         const response = await fetch(`${apiBase}/server/files/gcodes/${path}`);
-        return await response.blob();
+        return response.status === 200 ? await response.blob() : null;
     }
 
     static async getThumbnail(path){
         if (!path) return undefined;
         
         let thumbnailBlob = await this.getFile(path);
+        if (!thumbnailBlob) return null;
+
         return await thumbnailBlob.arrayBuffer().then((arrayBuffer) => Buffer.from(arrayBuffer, "binary"));
     }
 }

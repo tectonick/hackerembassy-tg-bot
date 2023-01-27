@@ -76,6 +76,7 @@ bot.onText(/^\/(printer)(@.+?)?$/, async (msg) => {
     if (status) {
       message = await TextGenerators.getPrinterInfo(status);
       let fileMetadata = (await printer3d.getFileMetadata(status.print_stats.filename))?.result;
+      console.log(fileMetadata)
       thumbnailBuffer = await printer3d.getThumbnail(fileMetadata?.thumbnails[2]?.relative_path);
     }    
   } catch (error) {
@@ -84,7 +85,7 @@ bot.onText(/^\/(printer)(@.+?)?$/, async (msg) => {
   }
 
   if (thumbnailBuffer) {
-    bot.sendPhoto(msg.chat.id, thumbnailBuffer, { caption: message });
+    bot.sendPhoto(msg.chat.id, thumbnailBuffer, { caption: message }, fileOptions);
   } else {
     bot.sendMessage(msg.chat.id, message);
   }
