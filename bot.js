@@ -68,15 +68,19 @@ let exportDonutHandler = async (msg, fundName) => {
 };
 
 bot.onText(/^\/(printer)(@.+?)?$/, async (msg) => {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+
   try {
-    var {status, fileMetadata, thumbnailBuffer} = await (await fetch("http://127.0.0.1:2000/printer"))?.json();
-    
+    var {status, fileMetadata, thumbnailBuffer} = await (await fetch("http://127.0.0.1:8001/printer", { signal: controller.signal }))?.json();
+    clearTimeout(timeoutId);
+
     if (status && !status.error) {
       var message = await TextGenerators.getPrinterInfo(status);
     } else throw Error();
   }
   catch {
-    message = `Принтер недоступен`;
+    message = `Принтер пока недоступен`;
   } 
   finally {
     if (thumbnailBuffer) {
