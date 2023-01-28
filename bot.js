@@ -1,4 +1,5 @@
 require("dotenv").config();
+require("./api");
 const TelegramBot = require("node-telegram-bot-api");
 const StatusRepository = require("./repositories/statusRepository");
 const UsersRepository = require("./repositories/usersRepository");
@@ -11,6 +12,7 @@ const Commands = require("./commands");
 const CoinsHelper = require("./data/coins/coins");
 const config = require("config");
 const botConfig = config.get("bot");
+const embassyApiConfig = config.get("embassy-api");
 const currencyConfig = config.get("currency");
 const {
   initGlobalModifiers,
@@ -21,8 +23,6 @@ const {
   needCommands,
   popLast,
 } = require("./botExtensions");
-const api = require("./api");
-const printer3d = require("./services/printer3d");
 const fetch = require("node-fetch");
 
 function parseMoneyValue(value) {
@@ -68,26 +68,31 @@ let exportDonutHandler = async (msg, fundName) => {
 };
 
 bot.onText(/^\/(printer)(@.+?)?$/, async (msg) => {
+  let message = TextGenerators.getPrinterInfo();
+  bot.sendMessage(msg.chat.id, message);
+});
+
+bot.onText(/^\/(printerstatus)(@.+?)?$/, async (msg) => {
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), 15000);
 
   try {
-    var {status, fileMetadata, thumbnailBuffer} = await (await fetch("http://127.0.0.1:8001/printer", { signal: controller.signal }))?.json();
+    var {status, thumbnailBuffer} = await (await fetch(`${embassyApiConfig.host}:${embassyApiConfig.port}/printer`, { signal: controller.signal }))?.json();
     clearTimeout(timeoutId);
 
-    if (status && !status.error) {
-      var message = await TextGenerators.getPrinterInfo(status);
-    } else throw Error();
+    if (status && !status.error)
+      var message = await TextGenerators.getPrinterStatus(status);
+    else 
+      throw Error();
   }
   catch {
-    message = `Принтер пока недоступен`;
+    message = `⚠️ Принтер пока недоступен`;
   } 
   finally {
-    if (thumbnailBuffer) {
+    if (thumbnailBuffer) 
       bot.sendPhoto(msg.chat.id, Buffer.from(thumbnailBuffer), { caption: message });
-    } else {
+    else 
       bot.sendMessage(msg.chat.id, message);
-    }
   }
 });
 

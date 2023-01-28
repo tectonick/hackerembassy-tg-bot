@@ -1,4 +1,7 @@
 const Currency = require("../services/currency");
+const config = require("config");
+const printer3dConfig = config.get("printer3d");
+const apiBase = printer3dConfig.apibase;
 
 function escapeUnderscore(text) {
   return text.replaceAll("_", "\\_");
@@ -172,21 +175,29 @@ ${!isApi ? "\n🗺 Чтобы узнать, как нас найти, жми /lo
 `;
 }
 
-async function getPrinterInfo(status) {
+function getPrinterInfo(){
+  return `🖨 3D принтер Anette от ubershy и cake64
+Документация по нему доступна тут:
+https://github.com/hackerembassy/printer-anette
+Веб интерфейс доступен внутри сети спейса по адресу ${apiBase}
+Статус принтера можно узнать по команде /printerstatus
+`
+}
+
+async function getPrinterStatus(status) {
   let print_stats = status.print_stats;
   let state = print_stats.state;
   let heater_bed = status.heater_bed;
   let extruder = status.extruder;
 
-  let message = `Статус принтера: ${state}`;
+  let message = `💤 Статус принтера: ${state}`;
 
   if (state === "printing") {
-
     let minutesPast = (print_stats.total_duration / 60).toFixed(2);
     let progress = (status.display_status.progress * 100).toFixed(0);
     let estimate = (((minutesPast / progress) * (100 - progress))).toFixed(2);
 
-    message = `📠 Печатается ${print_stats.filename}
+    message = `⏲ Печатается ${print_stats.filename}
 
 🕔 Процент файл завершения ${progress}%
    Прошло ${minutesPast} минут
@@ -213,4 +224,5 @@ module.exports = {
   getNeedsList,
   excapeUnderscore: escapeUnderscore,
   getPrinterInfo,
+  getPrinterStatus
 };

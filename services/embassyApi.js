@@ -2,23 +2,26 @@ const express = require("express");
 const cors = require("cors");
 const config = require("config");
 const printer3d = require("./printer3d");
-
+const embassyApiConfig = config.get("embassy-api");
 const app = express();
-const port = 8001;
+const port = embassyApiConfig.port;
 
 app.use(cors());
 
 app.get("/printer", async (_, res) => {
   try {
     console.log("/printer request");
+    
     let fileMetadata;
     let thumbnailBuffer;
     let statusResponse = await printer3d.getPrinterStatus();
     let status = statusResponse && statusResponse.result.status;
+
     if (status) {
       let fileMetadataResponse = await printer3d.getFileMetadata(
         status.print_stats && status.print_stats.filename
       );
+
       if (fileMetadataResponse) {
         fileMetadata = fileMetadataResponse.result;
         thumbnailBuffer = await printer3d.getThumbnail(
@@ -27,8 +30,7 @@ app.get("/printer", async (_, res) => {
       }
     }
 
-    res.send({ status, fileMetadata, thumbnailBuffer });
-    console.log("Sent status");
+    res.send({ status, thumbnailBuffer });
     console.log(status);
   } catch (error) {
     console.log(error);

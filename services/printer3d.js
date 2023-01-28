@@ -3,12 +3,12 @@ const config = require('config');
 const printer3dConfig = config.get("printer3d");
 const apiBase = printer3dConfig.apibase;
 
-
 class Printer3d{
     static async getPrinterStatus(){
         const response = await fetch(`${apiBase}/printer/objects/query?print_stats&display_status&heater_bed&extruder`);
         return await response.json();
     }
+    
     static async getFileMetadata(filename){
         if (!filename) return undefined;
         
