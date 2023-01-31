@@ -49,8 +49,7 @@ class UserRepository extends BaseRepository {
 
   setMAC(username, mac = null) {
     try {
-      if (this.getUser(username) === null || this.addUser(username, ["default"])) return false; 
-
+      if (this.getUser(username) === null && !this.addUser(username, ["default"])) return false; 
       if (mac) mac = mac.toLowerCase().replaceAll("-",":");
 
       this.db
