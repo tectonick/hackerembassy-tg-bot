@@ -345,7 +345,7 @@ let inHandler = (msg) => {
   let eventDate = new Date();
   let user = msg.from.username ?? msg.from.first_name;
   let gotIn = LetIn(user, eventDate);
-  let message = `🟢 ${tag()}${user} пришел в спейс 🟢
+  let message = `🟢 ${tag()}${user} пришел в спейс
 🗓 ${eventDate.toLocaleString()} `;
 
   if (!gotIn) {
@@ -398,7 +398,7 @@ let outHandler = (msg) => {
 🗓 ${eventDate.toLocaleString()} `;
 
   if (!gotOut) {
-    message = "🔐 Спейс же закрыт, как ты там оказался? Через окно залез? 🔐";
+    message = "🔐 Спейс же закрыт, как ты там оказался? Через окно залез?";
   }
 
   let inlineKeyboard = gotOut
