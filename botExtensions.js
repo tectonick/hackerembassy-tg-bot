@@ -180,6 +180,10 @@ async function sendBirthdayWishes(bot){
       return u.birthday?.substring(5, 10) === currentDate
     });
 
+    if (await fs.access(wishedTodayPath).catch(() => true)){
+      fs.writeFile(wishedTodayPath, "[]");
+    }
+
     let wishedToday = JSON.parse(await fs.readFile(wishedTodayPath, "utf8"));
 
     console.log(wishedToday)
