@@ -1,4 +1,5 @@
 .env
 .backup
+config/local.json
 node_modules
 data.db

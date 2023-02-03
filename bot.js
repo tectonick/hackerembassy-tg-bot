@@ -23,6 +23,7 @@ const {
   tag,
   needCommands,
   popLast,
+  enableAutoWishes
 } = require("./botExtensions");
 const fetch = require("node-fetch");
 
@@ -44,6 +45,7 @@ addLongCommands(bot);
 initGlobalModifiers(bot);
 addSavingLastMessages(bot);
 disableNotificationsByDefault(bot);
+if (botConfig.autoWish) enableAutoWishes(bot);
 
 function fromPrivateChat(msg) {
   return msg?.chat.type === "private";
@@ -514,6 +516,38 @@ function LetOut(username, date) {
 
   return true;
 }
+
+// Happy birthday
+
+function birthdayHandler(msg) {
+  let birthdayUsers = UsersRepository.getUsers().filter(u=>u.birthday);
+  let message = TextGenerators.getBirthdaysList(birthdayUsers, tag());
+
+  bot.sendMessage(msg.chat.id, message, { parse_mode: "Markdown" });
+}
+
+function myBirthdayHandler(msg, date) {
+  let message = `Укажите дату в формате \`YYYY-MM-DD\` или укажите \`remove\``;
+  let username = msg.from.username;
+
+  if (/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\d|3[0-1])$/.test(date)){
+    if (UsersRepository.setBirthday(username, date))
+      message = `День рождения ${tag()}${TextGenerators.excapeUnderscore(username)} установлен как ${date}`;
+  } else if (date === "remove") {
+    if (UsersRepository.setBirthday(username, null))
+      message = `День рождения ${tag()}${TextGenerators.excapeUnderscore(username)} сброшен`;
+  }
+
+  bot.sendMessage(msg.chat.id, message, { parse_mode: "Markdown" });
+}
+
+bot.onText(/^\/birthdays(@.+?)?$/, async (msg) =>
+  birthdayHandler(msg)
+);
+
+bot.onText(/^\/mybirthday(@.+?)?(?: (.*\S)?)?$/, async (msg, match) =>
+  myBirthdayHandler(msg, match[2])
+);
 
 // Needs and buys
 

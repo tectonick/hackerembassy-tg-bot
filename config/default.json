@@ -10,7 +10,8 @@
         "timeouts":{
             "in": 60000,
             "out": 1800000
-        }
+        },
+        "autoWish": true
     },
     "printer3d" : {
         "apibase":"http://192.168.1.100"
