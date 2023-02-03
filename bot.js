@@ -532,10 +532,10 @@ function myBirthdayHandler(msg, date) {
 
   if (/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\d|3[0-1])$/.test(date)){
     if (UsersRepository.setBirthday(username, date))
-      message = `День рождения ${tag()}${TextGenerators.excapeUnderscore(username)} установлен как ${date}`;
+      message = `🎂 День рождения ${tag()}${TextGenerators.excapeUnderscore(username)} установлен как ${date}`;
   } else if (date === "remove") {
     if (UsersRepository.setBirthday(username, null))
-      message = `День рождения ${tag()}${TextGenerators.excapeUnderscore(username)} сброшен`;
+      message = `🎂 День рождения ${tag()}${TextGenerators.excapeUnderscore(username)} сброшен`;
   }
 
   bot.sendMessage(msg.chat.id, message, { parse_mode: "Markdown" });
