@@ -177,7 +177,7 @@ async function sendBirthdayWishes(bot){
     let currentDate = (new Date()).toISOString().substring(5, 10);
 
     let birthdayUsers = UsersRepository.getUsers().filter(u => {
-      return u.birthday.substring(5, 10) === currentDate
+      return u.birthday?.substring(5, 10) === currentDate
     });
 
     let wishedToday = JSON.parse(await fs.readFile(wishedTodayPath, "utf8"));
