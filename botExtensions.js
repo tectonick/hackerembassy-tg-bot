@@ -186,10 +186,9 @@ async function sendBirthdayWishes(bot){
 
     let wishedToday = JSON.parse(await fs.readFile(wishedTodayPath, "utf8"));
 
-    console.log(wishedToday)
-
     for (const user of birthdayUsers) {
       if (wishedToday.find(entry => entry.username && entry.date === currentDate)) continue;
+      
       let message = "🎂 ";
       message += await getWish(user.username);
 
