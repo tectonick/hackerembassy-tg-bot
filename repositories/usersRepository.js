@@ -7,7 +7,7 @@ class UserRepository extends BaseRepository {
     return users.map((user) => ({
       roles: user.roles.split("|"),
       ...user
-    }));
+    })) ?? [];
   }
 
   addUser(username, roles = ["default"]) {
