@@ -189,7 +189,7 @@ async function sendBirthdayWishes(bot){
       let message = "🎂 ";
       message += await getWish(user.username);
 
-      bot.sendMessage(botConfig.chats.test, message);
+      bot.sendMessage(botConfig.chats.main, message);
       wishedToday.push({username: user.username, date: currentDate});
 
       sleep(30000);
