@@ -3,10 +3,6 @@ const cors = require("cors");
 const logger = require("./services/logger");
 const bodyParser = require('body-parser');
 const config = require("config");
-const botConfig = config.get("bot");
-const bot = require("./bot/bot");
-
-const EmbassyHandlers = new (require("./bot/handlers/embassy"))();
 
 const TextGenerators = require("./services/textGenerators");
 const StatusRepository = require("./repositories/statusRepository");
@@ -41,18 +37,6 @@ app.use(logError);
 // Routes
 app.get("/commands", (_, res) => {
   res.send(Commands.ApiCommandsList);
-});
-
-app.post("/doorbell", tokenSecured, async (req, res) => {
-  logger.info(`Got doorbell`);
-  let inside = StatusRepository.getPeopleInside();  
-  if (!inside || inside.length === 0){
-    logger.info(`No one inside. Notified members.`);
-    await bot.sendMessage(botConfig.chats.key, "🔔 Кто-то позвонил в дверной звонок, а внутри никого.");
-    await EmbassyHandlers.sendDoorcam(botConfig.chats.key);
-  }
-
-  res.send({message: "Success"});
 });
 
 app.get("/status", (_, res) => {
