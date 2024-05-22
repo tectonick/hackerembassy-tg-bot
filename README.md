@@ -1,3 +1,5 @@
+# Moved to https://github.com/hackerembassy/hackerembassy-tg-bot
+
 # Hacker Embassy Telegram Bot
 
 [![Up](https://uptime.hackem.cc/api/badge/7/status)](<(https://uptime.hackem.cc/api/badge/7/status)>)
