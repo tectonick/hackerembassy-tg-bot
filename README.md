@@ -1,5 +1,7 @@
 # Hacker Embassy Telegram Bot
 
+## Moved to https://github.com/hackerembassy/hackerembassy-tg-bot
+
 [![Up](https://uptime.hackem.cc/api/badge/7/status)](<(https://uptime.hackem.cc/api/badge/7/status)>)
 [![Ping](https://uptime.hackem.cc/api/badge/7/ping)](<(https://uptime.hackem.cc/api/badge/7/ping)>)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=hackerembassy_hackerembassy-tg-bot&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=hackerembassy_hackerembassy-tg-bot)
